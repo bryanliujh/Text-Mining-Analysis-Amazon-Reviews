@@ -106,13 +106,17 @@ def clean_sentence(filename_noun_phrase, process_filename_noun_phrase):
 def find_top_3_popular_product(data):
     count = Counter(data_item['asin'] for data_item in data)
     for letter, count in count.most_common(3):
+        pd_dict = {}
         top_pd_dict = {}
         for data_item in tqdm(data):
             if letter == data_item['asin']:
-                extract_noun_phrases(data_item['reviewText'].lower(),top_pd_dict)
-        top_pd_list = sorted(top_pd_dict.items(), reverse=True, key=lambda kv: kv[1])
+                pd_dict = extract_noun_phrases(data_item['reviewText'].lower(),pd_dict)
+        top_pd_list = sorted(pd_dict.items(), reverse=True, key=lambda kv: kv[1])
         for item in top_pd_list:
-            print(item[0],item[1])
+            if item[0] not in stops:
+                top_pd_dict[item[0]] = item[1]
+        top10pairs = {letter: {k: top_pd_dict[k] for k in list(top_pd_dict)[:10]}}
+        print(json.dumps(top10pairs))
 
 
 def find_top_20_noun_phrase(filename_noun_phrase):
@@ -131,7 +135,7 @@ def random_sample_5reviews(data):
         print(rand_item['reviewText'])
         print("Noun Phrase: ")
         print([noun_phrase.text for noun_phrase in doc.noun_chunks])
-        [to_nltk_tree(sent.root).pretty_print() for sent in doc.sents]
+        #[to_nltk_tree(sent.root).pretty_print() for sent in doc.sents]
 
 
 

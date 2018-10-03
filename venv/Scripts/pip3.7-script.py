@@ -1,4 +1,4 @@
-#!"c:\users\ntu user\desktop\nps\venv\scripts\python.exe"
+#!"C:\Users\NTU user\Desktop\NPS\venv\Scripts\python.exe"
 # EASY-INSTALL-ENTRY-SCRIPT: 'pip==18.0','console_scripts','pip3.7'
 __requires__ = 'pip==18.0'
 import re

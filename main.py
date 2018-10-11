@@ -105,6 +105,7 @@ def clean_sentence(filename_noun_phrase, process_filename_noun_phrase):
 
 def find_top_3_popular_product(data):
     count = Counter(data_item['asin'] for data_item in data)
+    outputStr = ""
     for letter, count in count.most_common(3):
         pd_dict = {}
         top_pd_dict = {}
@@ -116,26 +117,50 @@ def find_top_3_popular_product(data):
             if item[0] not in stops:
                 top_pd_dict[item[0]] = item[1]
         top10pairs = {letter: {k: top_pd_dict[k] for k in list(top_pd_dict)[:10]}}
-        print(json.dumps(top10pairs))
+        outputStr = outputStr + "\n" + json.dumps(top10pairs)
+    outputStr = "===========================Summarise 3 popular product reviews by its representative noun phrase==========================================" +  outputStr
+    print(outputStr)
 
 
 def find_top_20_noun_phrase(filename_noun_phrase):
     with open(filename_noun_phrase, 'r') as file:
         data = json.load(file)
         first20pairs = {k: data[k] for k in list(data)[:20]}
+        print("\n============================Top 20 most frequent noun phrases used by reviewers=====================================")
         print("Top 20 noun phrase: " + json.dumps(first20pairs))
 
         file.close()
 
 
 def random_sample_5reviews(data):
+    print("\n==============================Randomly sample 5 reviews and evaluate the effectiveness of the noun phrase detector in terms of Precision and Recall================================")
+
     for i in range(0,5):
         rand_item = random.choice(data)
-        doc = nlp(rand_item['reviewText'])
-        print(rand_item['reviewText'])
+        sentence_raw = rand_item['reviewText'].lower()
+        noun_phrase_arr = []
+
+        print("\nReview: ")
+        print(sentence_raw)
+
+        doc = nlp(sentence_raw)
+
         print("Noun Phrase: ")
+        for noun_phrase in doc.noun_chunks:
+            if noun_phrase.text not in stops:
+                noun_phrase_arr.append(noun_phrase.text)
+        print(noun_phrase_arr)
         print([noun_phrase.text for noun_phrase in doc.noun_chunks])
         #[to_nltk_tree(sent.root).pretty_print() for sent in doc.sents]
+
+    '''
+    myTestArr = ["I had my doubts, but the product lived up to the description. It's matte and no more oily fingerprints! I will definitely buy more.",
+                 "I bought it as a gift and im really enjoying it not much for big drop protection but its done a good job so far.",
+                 "this case is a great case.  my husband drops his phone all the time, this case protects the phone very well."]
+    for i in range(0,5):
+    '''
+
+
 
 
 
@@ -156,3 +181,9 @@ def to_nltk_tree(node):
 
 if __name__ == '__main__':
     load_json_file()
+
+
+#I had my doubts, but the product lived up to the description. It's matte and no more oily fingerprints! I will definitely buy more.
+#I bought it as a gift and im really enjoying it not much for big drop protection but its done a good job so far.
+#this case is a great case.  my husband drops his phone all the time, this case protects the phone very well.
+#i like this case very much. covers my phone and keeps the front from being scratched when placed down. great protection!

@@ -55,7 +55,6 @@ def load_json_file():
 def extract_noun_phrases(sentence, noun_dict):
     list_of_noun_phrases = nlp(sentence).noun_chunks
     for noun_phrase in list_of_noun_phrases:
-        # remove stopwords and punctuations
         if len(noun_phrase.text) > 1:
             if noun_phrase.text in noun_dict:
                 noun_dict[noun_phrase.text] = noun_dict[noun_phrase.text] + 1
@@ -141,6 +140,9 @@ def reviews_chosen():
 def check_file_exist(filename):
     is_exists = os.path.isfile(filename)
     return is_exists
+
+
+
 
 
 if __name__ == '__main__':

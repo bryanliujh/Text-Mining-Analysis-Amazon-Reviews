@@ -25,7 +25,7 @@ oauthlib==2.1.0
 pandas==0.23.4
 plac==0.9.6
 preshed==1.0.1
-protobuf==3.6.1
+protobuf==3.18.3
 pyparsing==2.2.1
 pyreadline==2.1
 python-dateutil==2.7.3
